@@ -6,7 +6,7 @@ import { TimeInterval } from 'rxjs';
   template: `
     <div class="stop-watch">
       <div class="display">{{textMinute}}:{{textSecond}}:{{textMillisecond}}</div>
-      <button class="control" (click)="stopwatch()">{{btnText}}</button>
+      <button class="control" (click)="stopwatch()">{{state ? 'Stop' : 'Start'}}</button>
     </div>
   `,
   styles: [`
@@ -34,7 +34,7 @@ import { TimeInterval } from 'rxjs';
   `]
 })
 export class StopwatchComponent {
-  btnText = 'Start';
+  state: boolean;
   millisecond = 0;
   second = 0;
   minute = 0;
@@ -44,8 +44,8 @@ export class StopwatchComponent {
   textMinute = '00';
 
   stopwatch() {
-    if (this.btnText === 'Start') {
-      this.btnText = 'Stop';
+    this.state = !this.state;
+    if (this.state) {
       this.interval = setInterval(() => {
         this.millisecond += 1;
         if (this.millisecond > 99) {
@@ -61,7 +61,6 @@ export class StopwatchComponent {
         this.textMillisecond = this.millisecond < 10 ?'0' + this.millisecond : this.millisecond + '';
       }, 10);
     } else {
-      this.btnText = 'Start';
       clearInterval(this.interval);
     }
   }
